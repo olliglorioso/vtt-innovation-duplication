@@ -8,7 +8,7 @@ class Extractor():
         text_to_compare = df["source id"] + " - " + df["source description"].fillna("") + " | Developed by " + df["target english_id"].fillna("")
         return text_to_compare    
     
-    def extract(self):
+    def extract(self, location="./data/results/df_combined.csv"):
         # Extract the CSV files
         vtt_domain_df = pd.read_csv("./data/dataframes/df_relationships_vtt_domain.csv")
         comp_domain_df = pd.read_csv("./data/dataframes/df_relationships_comp_url.csv")
@@ -37,6 +37,6 @@ class Extractor():
 
         
         df_combined = pd.concat([vtt_domain_df, comp_domain_df], ignore_index=True)
-        df_combined.to_csv("./data/results/df_combined.csv")
+        df_combined.to_csv(location)
         
         
