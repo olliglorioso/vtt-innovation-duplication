@@ -6,6 +6,7 @@ class Extractor():
         
     def create_text_to_compare(self, df):
         text_to_compare = df["source id"] + " - " + df["source description"].fillna("") + " | Developed by " + df["target english_id"].fillna("")
+        
         return text_to_compare   
 
     def filter_vtt_present_docs(self, df):
