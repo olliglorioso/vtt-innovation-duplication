@@ -1,0 +1,18 @@
+name: vtt-innovation-analysis
+channels:
+  - conda-forge
+  - pytorch
+  - defaults
+dependencies:
+  - python=3.9
+  - pandas
+  - tqdm
+  - jupyter
+  - ipykernel
+  - numpy
+  - pip
+  - pip:
+      - sentence-transformers
+      - torch
+      - transformers
+      - scikit-learn
