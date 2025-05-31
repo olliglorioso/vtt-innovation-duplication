@@ -1,0 +1,14 @@
+[project]
+name = "vtt-innovation-duplication"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "dedupe>=3.0.3",
+    "jupyter>=1.1.1",
+    "langchain-openai>=0.3.18",
+    "matplotlib>=3.10.3",
+    "pandas>=2.2.3",
+    "sentence-transformers>=4.1.0",
+]
