@@ -28,32 +28,29 @@ class Extractor():
         vtt_domain_df = pd.read_csv("./data/dataframes/df_relationships_vtt_domain.csv")
         comp_domain_df = pd.read_csv("./data/dataframes/df_relationships_comp_url.csv")
         
-        vtt_domain_df = vtt_domain_df[vtt_domain_df["relationship type"] == "DEVELOPED_BY"].copy()
-        comp_domain_df = comp_domain_df[comp_domain_df["relationship type"] == "DEVELOPED_BY"].copy()
+        # Include both DEVELOPED_BY and COLLABORATION relationships
+        vtt_domain_df = vtt_domain_df[
+            vtt_domain_df["relationship type"].isin(["DEVELOPED_BY", "COLLABORATION"])
+        ].copy()
         
-        comp_domain_vtt_present = self.filter_vtt_present_docs(comp_domain_df)
-
+        comp_domain_df = comp_domain_df[
+            comp_domain_df["relationship type"].isin(["DEVELOPED_BY", "COLLABORATION"])
+        ].copy()
+        
+        # Create text to compare for ALL rows (both Innovation and Organization sources)
         vtt_domain_df["text_to_compare"] = self.create_text_to_compare(vtt_domain_df)
-
-        # vtt_domain_df = vtt_domain_df.drop_duplicates(subset="source description", keep="first")
-
         comp_domain_df["text_to_compare"] = self.create_text_to_compare(comp_domain_df)
-
-        comp_domain_df = comp_domain_df[comp_domain_df["source type"] != "Organization"]
+        
+        # DON'T filter out Organizations here - keep all relationship data
+        # Filter will happen later when we do similarity comparison
+        
+        # Drop duplicates based on source description
+        vtt_domain_df = vtt_domain_df.drop_duplicates(subset="source description", keep="first")
         comp_domain_df = comp_domain_df.drop_duplicates(subset="source description", keep="first")
-
-        # compain_domain_df = compain_domain_df.drop_duplicates(subset="source description", keep="first")
-
-        print("Comp domain df length:", len(comp_domain_df), " - VTT domain df length:", len(vtt_domain_df))
-        print("Example of text to compare:", vtt_domain_df.iloc[0]["text_to_compare"])
-                
         
-        
-        vtt_domain_df["Document number"] = "VTT" + vtt_domain_df["Document number"].astype(str)
-        comp_domain_df["Document number"] = "COMP" + comp_domain_df["Document number"].astype(str)
-
+        # Combine and save ALL relationship data
         df_combined = pd.concat([vtt_domain_df, comp_domain_df], ignore_index=True)
-        df_combined.to_csv(location)
+        df_combined.to_csv(location, index=False)
         
-        comp_domain_vtt_present.to_csv("./data/results/df_comp_domain_vtt_present.csv", index=False)
+        #comp_domain_vtt_present.to_csv("./data/results/df_comp_domain_vtt_present.csv", index=False)
         
