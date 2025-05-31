@@ -32,7 +32,6 @@ class Extractor():
 
         comp_domain_df = pd.read_csv("./data/dataframes/df_relationships_comp_url.csv")
         comp_domain_df = comp_domain_df[comp_domain_df["relationship type"] == "DEVELOPED_BY"].copy()
-        comp_domain_vtt_present = self.filter_vtt_present_docs(comp_domain_df)
         comp_domain_df = comp_domain_df[comp_domain_df["source type"] != "Organization"]
         comp_domain_df["text_to_compare"] = self.create_text_to_compare(comp_domain_df)
 
@@ -45,5 +44,6 @@ class Extractor():
         df_combined = pd.concat([vtt_domain_df, comp_domain_df], ignore_index=True)
         df_combined.to_csv(location)
         
+        comp_domain_vtt_present = self.filter_vtt_present_docs(comp_domain_df)
         comp_domain_vtt_present.to_csv("./data/results/df_comp_domain_vtt_present.csv", index=False)
         
