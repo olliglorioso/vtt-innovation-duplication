@@ -26,9 +26,9 @@ with tab1:
 with tab2:
     st.header("Interactive Network Graph")
 
-  #  with open("graph.html", 'r', encoding='utf-8') as f:
-       # graph_html = f.read()
-   # st.components.v1.html(graph_html, height=600, scrolling=True)
+    with open("vtt_innovation_network.html", 'r', encoding='utf-8') as f:
+        graph_html = f.read()
+    st.components.v1.html(graph_html, height=600, scrolling=True)
 
 # --- TAB 3: Embeddings ---
 with tab3:
