@@ -141,3 +141,8 @@ Thumbs.db
 .Trashes
 ehthumbs.db
 Thumbs.db 
+
+# uv files
+.python-version
+pyproject.toml
+uv.lock
