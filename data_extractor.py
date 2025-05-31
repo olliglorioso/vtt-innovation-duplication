@@ -29,8 +29,8 @@ class Extractor():
         vtt_domain_df = pd.read_csv("./data/dataframes/df_relationships_vtt_domain.csv")
         comp_domain_df = pd.read_csv("./data/dataframes/df_relationships_comp_url.csv")
         
-        vtt_domain_df = vtt_domain_df[vtt_domain_df["relationship type"] == "DEVELOPED_BY"].copy()
-        comp_domain_df = comp_domain_df[comp_domain_df["relationship type"] == "DEVELOPED_BY"].copy()
+        #vtt_domain_df = vtt_domain_df[vtt_domain_df["relationship type"] == "DEVELOPED_BY"].copy()
+        #comp_domain_df = comp_domain_df[comp_domain_df["relationship type"] == "DEVELOPED_BY"].copy()
         
         comp_domain_vtt_present = self.filter_vtt_present_docs(comp_domain_df)
 
@@ -40,7 +40,7 @@ class Extractor():
 
         comp_domain_df["text_to_compare"] = self.create_text_to_compare(comp_domain_df)
 
-        comp_domain_df = comp_domain_df[comp_domain_df["source type"] != "Organization"]
+        #comp_domain_df = comp_domain_df[comp_domain_df["source type"] != "Organization"]
         comp_domain_df = comp_domain_df.drop_duplicates(subset="source description", keep="first")
 
         # compain_domain_df = compain_domain_df.drop_duplicates(subset="source description", keep="first")
