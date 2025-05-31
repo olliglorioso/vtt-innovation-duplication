@@ -6,10 +6,10 @@ from pyvis.network import Network
 import pickle
 # --- PAGE SETUP ---
 st.set_page_config(page_title="Network Analysis Demo", layout="wide")
-st.title("🔍 Network Analysis Demo")
+st.title("🔍 Aalto AI Hackathon Demo")
 
 # --- TABS FOR NAVIGATION ---
-tab1, tab2, tab3, tab4 = st.tabs(["Overview", "Network Graph", "Graphs", "Performance"])
+tab1, tab2, tab3, tab4 = st.tabs(["Overview", "Network Graph", "Graphs", "Evaluation"])
 
 # --- TAB 1: Overview ---
 with tab1:
@@ -65,14 +65,13 @@ with tab3:
 
 # --- TAB 4: Performance ---
 with tab4:
-    st.header("Model Performance")
-
-    # Confusion Matrix
-   # fig_cm = px.imshow(...)  # Your confusion matrix
-    st.subheader("Confusion Matrix")
-    #st.plotly_chart(fig_cm)
-
-    # ROC Curve
-    #fig_roc = px.line(...)  # Your ROC curve
-    st.subheader("ROC Curve")
-    #st.plotly_chart(fig_roc)
+    st.header("Evaluation")
+    st.markdown("""
+                    We evaluated the perfomance of the deduplication by creating a validation set manually which had 100 pairs
+                which were either considered duplicates or not.
+                The metric are shown below.
+                """)
+    st.metric("Accuracy", "87%")
+    st.metric("Recall", "96%")
+    st.metric("Precision", "83%")
+    st.metric("F1 Score", "89%")
