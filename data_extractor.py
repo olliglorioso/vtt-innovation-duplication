@@ -43,6 +43,16 @@ class Extractor():
 
         df_combined = pd.concat([vtt_domain_df, comp_domain_df], ignore_index=True)
         df_combined.to_csv(location)
+
+        # Hack 1: Create another exactly the same df, but without filtering developed_by and organization
+        # Save it to location + .no_filter.csv
+        new_vtt_domain_df = pd.read_csv("./data/dataframes/df_relationships_vtt_domain.csv")
+        new_comp_domain_df = pd.read_csv("./data/dataframes/df_relationships_comp_url.csv")
+        # These wont need embeddings so just combine them after giving the IDs
+        new_vtt_domain_df["Document number"] = "VTT" + new_vtt_domain_df["Document number"].astype(str)
+        new_comp_domain_df["Document number"] = "COMP" + new_comp_domain_df["Document number"].astype(str)
+        new_df_combined = pd.concat([new_vtt_domain_df, new_comp_domain_df], ignore_index=True)
+        new_df_combined.to_csv(location.replace(".csv", ".no_filter.csv"), index=False)
         
         comp_domain_vtt_present = self.filter_vtt_present_docs(comp_domain_df)
         comp_domain_vtt_present.to_csv("./data/results/df_comp_domain_vtt_present.csv", index=False)

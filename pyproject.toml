@@ -13,4 +13,5 @@ dependencies = [
     "sentence-transformers>=4.1.0",
     "streamlit",
     "pyvis",
+    "langchain",
 ]
