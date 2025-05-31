@@ -9,7 +9,7 @@ st.set_page_config(page_title="Network Analysis Demo", layout="wide")
 st.title("🔍 Network Analysis Demo")
 
 # --- TABS FOR NAVIGATION ---
-tab1, tab2, tab3, tab4 = st.tabs(["Overview", "Network Graph", "Embeddings", "Performance"])
+tab1, tab2, tab3, tab4 = st.tabs(["Overview", "Network Graph", "Graphs", "Performance"])
 
 # --- TAB 1: Overview ---
 with tab1:
@@ -42,6 +42,26 @@ with tab3:
     with open("data/results/thresholds.pkl", "rb") as f:
         thresholds = pickle.load(f)
     st.pyplot(thresholds)
+
+    st.subheader("Threshold groups")
+    st.markdown("""
+        Here we can see the amount of groups created, size of the groups and the total amount of pairs in the groups
+        for each threshold value.
+    """)
+    with open("data/results/thresholds_group.pkl", "rb") as f:
+        thresholds_groups = pickle.load(f)
+    st.pyplot(thresholds_groups)
+
+
+    st.subheader("Embeddings visualization")
+    st.markdown("""
+        Here you can see the visualization of the vector embeddings.
+        Note that the embeddings contain over 3000 dimensions and these are reduced to 2 dimensions using PCA.
+        The colors represent the groups that the pairs belong to.
+    """)
+    with open("data/results/embeddings.pkl", "rb") as f:
+        embeddings = pickle.load(f)
+    st.pyplot(embeddings)
 
 # --- TAB 4: Performance ---
 with tab4:
