@@ -9,26 +9,29 @@ from sklearn.metrics import adjusted_rand_score, normalized_mutual_info_score, h
 def create_composite_key(item_dict: Dict, is_ground_truth: bool = False) -> str:
     """
     Create a composite key for matching items between ground truth and clustering results.
-    Uses source_id, source_description, and target_id (if available).
+    Uses source_id, source_description, target_id (if available), and document_number.
     """
     if is_ground_truth:
         # Ground truth structure
         source_id = item_dict.get('source_id', '')
         source_desc = item_dict.get('source_description', '')
         target_id = item_dict.get('target_id', '')  # May not exist in ground truth
+        document_number = item_dict.get('document_number', '')
     else:
         # Clustering results structure  
         source_id = item_dict.get('source id', '')
         source_desc = item_dict.get('source description', '')
         target_id = item_dict.get('target id', '')
+        document_number = item_dict.get('Document number', '')
     
     # Create composite key - normalize whitespace and handle missing values
     source_id = str(source_id).strip() if source_id else ''
     source_desc = str(source_desc).strip() if source_desc else ''
     target_id = str(target_id).strip() if target_id else ''
+    document_number = str(document_number).strip() if document_number else ''
     
     # Use a separator that's unlikely to appear in the data
-    composite_key = f"{source_id}||{source_desc}||{target_id}"
+    composite_key = f"{source_id}||{source_desc}||{target_id}||{document_number}"
     return composite_key
 
 def load_ground_truth(file_path: str) -> Tuple[Set[Tuple[str, str]], Set[Tuple[str, str]]]:

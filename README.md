@@ -4,7 +4,7 @@
 
 ### Prerequisites
 
-- Python 3.9+
+- Python 3.10
 - [uv](https://github.com/astral-sh/uv) package manager
 
 ### 1. Setup Environment
@@ -87,15 +87,6 @@ uv run jupyter lab
 - Analyzes relationship between threshold, number of groups, and group sizes
 - Identifies potential innovation duplications above specified threshold (default: 0.8)
 
-#### **Fuzzy Deduplication System** _(Validation Dataset Creation)_
-
-- **Interactive Manual Labeling**: Used to create ground truth validation dataset through manual pair labeling
-- **Dedupe Library Integration**: Uses advanced record linkage techniques with field-specific variables
-- **Training Data Generation**: Creates labeled positive and negative duplicate pairs for evaluation
-- **Comprehensive Field Analysis**: Analyzes multiple fields (ID, description, relationships, targets)
-- **Confidence Scoring**: Provides confidence scores for each potential duplicate pair
-- **Cross-document Duplicate Detection**: Identifies duplicates across different data sources
-- Creates training data saved as: `innovation_dedupe_validation.json`
 
 #### **Visualization & Analysis**
 
@@ -127,14 +118,17 @@ uv run jupyter lab
 - `data/results/results_with_reasoning.json` - LLM validation results with reasoning
 - `data/results/unified_innovations_5.json` - Final unified innovation records
 - `data/results/vtt_unified_innovations.csv` - CSV format of unified innovations
-- `innovation_duplicates.csv` - Fuzzy deduplication results (if using alternative method)
 
 ### Step 2: Evaluation Framework
+
+#### **Validation dataset creation**
+
+Used dedupe's interactive labeling CLI to manually label 100 pairs of innovations as duplicate or distinct. This was used as the validation dataset and saved as: `innovation_dedupe_validation.json`.
 
 **Comprehensive Clustering Evaluation:**
 
 ```bash
-uv run python evaluate_clustering.py ground_truth.json predictions.json
+uv run python evaluate_clustering.py data/validation/innovation_dedupe_validation.json data/results/enhanced_groups.json -o data/results/clustering_evaluation_results.json
 ```
 
 **Features:**
