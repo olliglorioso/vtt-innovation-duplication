@@ -8,7 +8,7 @@ st.set_page_config(
     layout="wide",
     page_icon="🔬"
 )
-st.title("🔬 VTT Innovation Duplication Analysis")
+st.title("LLM Aggregators - VTT Innovation Duplication Analysis")
 
 # --- UTILITY FUNCTIONS ---
 @st.cache_data
@@ -30,7 +30,7 @@ tab1, tab2, tab3, tab4 = st.tabs(["🏠 Overview", "🌐 Network Graph", "📊 A
 
 # --- TAB 1: Overview ---
 with tab1:
-    st.header("Innovation Duplication Analysis")
+    st.header("Innovation Duplication Analysis and LLM Aggregator")
     st.markdown("""
     **Our Three-Step Approach:**
     
