@@ -6,7 +6,6 @@ data/
 *.json
 *.parquet
 *.pickle
-*.pkl
 
 # Python
 __pycache__/

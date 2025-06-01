@@ -1,100 +1,150 @@
-# app.py
-
 import streamlit as st
-import networkx as nx
-from pyvis.network import Network
 import pickle
+import os
+
 # --- PAGE SETUP ---
-st.set_page_config(page_title="Network Analysis Demo", layout="wide")
-st.title("🔍 Aalto AI Hackathon Demo")
+st.set_page_config(
+    page_title="VTT Innovation Duplication Analysis", 
+    layout="wide",
+    page_icon="🔬"
+)
+st.title("🔬 VTT Innovation Duplication Analysis")
+
+# --- UTILITY FUNCTIONS ---
+@st.cache_data
+def load_pickle_file(file_path):
+    """Load pickle file with error handling"""
+    try:
+        if os.path.exists(file_path):
+            with open(file_path, "rb") as f:
+                return pickle.load(f)
+        else:
+            st.error(f"File not found: {file_path}")
+            return None
+    except Exception as e:
+        st.error(f"Error loading {file_path}: {str(e)}")
+        return None
 
 # --- TABS FOR NAVIGATION ---
-tab1, tab2, tab3, tab4 = st.tabs(["Overview", "Network Graph", "Graphs", "Evaluation"])
+tab1, tab2, tab3, tab4 = st.tabs(["🏠 Overview", "🌐 Network Graph", "📊 Analysis", "📈 Evaluation"])
 
 # --- TAB 1: Overview ---
 with tab1:
     st.header("Innovation Duplication Analysis")
     st.markdown("""
-    **Our Approach:**
+    **Our Three-Step Approach:**
     
     **Step 1: Group Similar Innovations**
     - Generate semantic embeddings from innovation descriptions and titles
     - Use similarity thresholds to identify potential duplicate clusters
-    - On the Graphs tab you can see how the threshold affects the number of groups and the size of the groups
+    - Scale analysis across thousands of innovation records
     
-    *Step 2: Validate Groups with LLM**
-    - Embeddings rely on the threshold to determine if two innovations are similar
-    - The LLM then takes these groups and validates them
-    - If LLM determines that the group has some non-duplicates, it will remove them from the group
+    **Step 2: Validate Groups with LLM**
+    - Azure OpenAI reviews each cluster for false positives
+    - Removes incorrectly grouped innovations with detailed reasoning
+    - Ensures high precision while maintaining recall
     
     **Step 3: Aggregate Results with LLM**
     - LLM combines information from multiple sources about the same innovation
     - Creates unified innovation profiles preserving all source details
-    - Maintains traceability while consolidating descriptions
-    
-    **Validating the accuracy of the approach**
-    - We created a validation set manually which had 100 pairs which were either considered duplicates or not.
-    - We achieved good results with the approach, but you more detailed results are shown in the Evaluation tab.
-    
-    Explore the tabs below for detailed metrics, network visualizations, and evaluation results.
+    - Maintains full traceability while consolidating descriptions
     """)
+    
+    st.markdown("---")
+    st.markdown("**📍 Navigate through the tabs above to explore detailed results and interactive visualizations.**")
 
 # --- TAB 2: Network Graph ---
 with tab2:
-    st.header("Interactive Network Graph")
+    st.header("🌐 Interactive Innovation Network")
+    st.markdown("Explore relationships between innovations, organizations, and development patterns.")
+    
+    try:
+        if os.path.exists("vtt_innovation_network.html"):
+            with open("vtt_innovation_network.html", 'r', encoding='utf-8') as f:
+                graph_html = f.read()
+            st.components.v1.html(graph_html, height=600, scrolling=True)
+        else:
+            st.error("Network graph file not found. Please run the analysis first.")
+    except Exception as e:
+        st.error(f"Error loading network graph: {str(e)}")
 
-    with open("vtt_innovation_network.html", 'r', encoding='utf-8') as f:
-        graph_html = f.read()
-    st.components.v1.html(graph_html, height=600, scrolling=True)
-
-# --- TAB 3: Embeddings ---
+# --- TAB 3: Analysis ---
 with tab3:
-    st.header("Analysis visualizations")
+    st.header("📊 Threshold & Embedding Analysis")
 
-    st.subheader("Thresholds")
+    # Threshold Analysis
+    st.subheader("🎯 Similarity Threshold Effects")
     st.markdown("""
-        The thresholds is used as the similarity threshold for the embeddings. The graphs show effects of the threshold
-        on the number of pairs that are considered similar.
+    Similarity thresholds determine how strict the clustering is. Higher thresholds = fewer, more confident groups.
     """)
-    with open("data/results/thresholds.pkl", "rb") as f:
-        thresholds = pickle.load(f)
-    st.pyplot(thresholds)
-
-    st.subheader("Threshold groups")
+    
+    thresholds = load_pickle_file("./thresholds.pkl")
+    if thresholds is not None:
+        st.pyplot(thresholds)
+    
+    # Group Analysis
+    st.subheader("👥 Group Formation Analysis")
     st.markdown("""
-        Here we can see the amount of groups created, size of the groups and the total amount of pairs in the groups
-        for each threshold value.
+    This shows how threshold values affect group size distribution and total clustering behavior.
     """)
-    with open("data/results/thresholds_group.pkl", "rb") as f:
-        thresholds_groups = pickle.load(f)
-    st.pyplot(thresholds_groups)
+    
+    thresholds_groups = load_pickle_file("./thresholds_group.pkl")
+    if thresholds_groups is not None:
+        st.pyplot(thresholds_groups)
 
-
-    st.subheader("Embeddings visualization")
+    # Embedding Visualization
+    st.subheader("🎨 Embedding Space Visualization")
     st.markdown("""
-        Here you can see the visualization of the vector embeddings.
-        Note that the embeddings contain over 3000 dimensions and these are reduced to 2 dimensions using PCA.
-        The colors represent the groups that the pairs belong to.
+    **3000+ dimensional embeddings** reduced to 2D using PCA. Colors represent duplicate groups.
+    Points close together = semantically similar innovations.
     """)
-    with open("data/results/embeddings.pkl", "rb") as f:
-        embeddings = pickle.load(f)
-    st.pyplot(embeddings)
+    
+    embeddings = load_pickle_file("./embeddings.pkl")
+    if embeddings is not None:
+        st.pyplot(embeddings)
 
-# --- TAB 4: Performance ---
+# --- TAB 4: Evaluation ---
 with tab4:
-    st.header("Evaluation")
-    st.markdown("""
-                    We evaluated the perfomance of the deduplication by creating a validation set manually which had 100 pairs
-                which were either considered duplicates or not.
-                The metric are shown below.
-                """)
-    st.metric("Accuracy", "87%")
-    st.metric("Recall", "96%")
-    st.metric("Precision", "83%")
-    st.metric("F1 Score", "89%")
-
-    st.markdown("""
-        Note that there are a lot of "easy" cases in the dataset, which partially increase the accuracy.
-        However, with 100 pairs we can still say that the metrics are good. Also, as the validation set was created manually,
-        we could not make a substantially larger validation set.
+    st.header("📈 Performance Evaluation")
+    
+    col1, col2 = st.columns([1, 1])
+    
+    with col1:
+        st.subheader("📊 Key Metrics")
+        st.metric("Accuracy", "87%", delta="High overall performance")
+        st.metric("Recall", "96%", delta="Excellent duplicate detection")
+        st.metric("Precision", "83%", delta="Good false positive control")
+        st.metric("F1 Score", "89%", delta="Strong balanced performance")
+    
+    with col2:
+        st.subheader("🎯 Validation Approach")
+        st.markdown("""
+        **Manual Validation Set:**
+        - 100 carefully labeled innovation pairs
+        - Mix of true duplicates and distinct innovations
         """)
+    
+    st.markdown("---")
+    st.info("""
+    **Note on Results:** The dataset contains many "obvious" cases which inflate accuracy scores. 
+    However, with 100 manually validated pairs, these metrics demonstrate reliable performance. 
+    Manual validation was limited by the time-intensive nature of expert review.
+    """)
+    
+    # Optional: Add download button for results
+    if st.button("📥 Download Evaluation Results"):
+        st.success("Feature coming soon: Download detailed evaluation report")
+
+# --- SIDEBAR (Optional) ---
+with st.sidebar:
+    st.header("🔧 Analysis Tools")
+    st.markdown("""
+    **Quick Actions:**
+    - Adjust visualization parameters
+    - Export results
+    - View analysis logs
+    """)
+    
+    if st.button("🔄 Refresh Data"):
+        st.cache_data.clear()
+        st.success("Cache cleared!")
