@@ -127,7 +127,7 @@ Used dedupe's interactive labeling CLI to manually label 100 pairs of innovation
 **Comprehensive Clustering Evaluation:**
 
 ```bash
-uv run python evaluate_clustering.py data/validation/innovation_dedupe_validation.json data/results/enhanced_groups.json -o data/results/clustering_evaluation_results.json
+uv run evaluate_clustering.py data/validation/innovation_dedupe_validation.json data/results/enhanced_groups.json -o data/results/clustering_evaluation_results.json
 ```
 
 **Features:**
