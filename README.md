@@ -1,5 +1,11 @@
 # VTT Innovation Duplication Analysis
 
+## Team members
+- Samu Toljamo
+- Olli Glorioso
+- Viljiami Hakkarainen
+- David Ramos
+
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -175,3 +181,4 @@ uv run streamlit run viz.py
 ### Visualization (`viz.py`)
 
 - Interactive Streamlit dashboard for exploring results with network graphs, threshold analysis, and evaluation metrics
+
