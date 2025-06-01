@@ -13,14 +13,31 @@ tab1, tab2, tab3, tab4 = st.tabs(["Overview", "Network Graph", "Graphs", "Evalua
 
 # --- TAB 1: Overview ---
 with tab1:
-    st.header("Project Overview")
+    st.header("Innovation Duplication Analysis")
     st.markdown("""
-    This project analyzes X dataset to produce a network graph revealing Y.
-    Key steps include embedding, clustering, and graph construction.
+    **Our Approach:**
+    
+    **Step 1: Group Similar Innovations**
+    - Generate semantic embeddings from innovation descriptions and titles
+    - Use similarity thresholds to identify potential duplicate clusters
+    - On the Graphs tab you can see how the threshold affects the number of groups and the size of the groups
+    
+    *Step 2: Validate Groups with LLM**
+    - Embeddings rely on the threshold to determine if two innovations are similar
+    - The LLM then takes these groups and validates them
+    - If LLM determines that the group has some non-duplicates, it will remove them from the group
+    
+    **Step 3: Aggregate Results with LLM**
+    - LLM combines information from multiple sources about the same innovation
+    - Creates unified innovation profiles preserving all source details
+    - Maintains traceability while consolidating descriptions
+    
+    **Validating the accuracy of the approach**
+    - We created a validation set manually which had 100 pairs which were either considered duplicates or not.
+    - We achieved good results with the approach, but you more detailed results are shown in the Evaluation tab.
+    
+    Explore the tabs below for detailed metrics, network visualizations, and evaluation results.
     """)
-    st.metric("Recall", "92%")
-    st.metric("Precision", "88%")
-    st.metric("Accuracy", "89%")
 
 # --- TAB 2: Network Graph ---
 with tab2:
@@ -75,3 +92,9 @@ with tab4:
     st.metric("Recall", "96%")
     st.metric("Precision", "83%")
     st.metric("F1 Score", "89%")
+
+    st.markdown("""
+        Note that there are a lot of "easy" cases in the dataset, which partially increase the accuracy.
+        However, with 100 pairs we can still say that the metrics are good. Also, as the validation set was created manually,
+        we could not make a substantially larger validation set.
+        """)
