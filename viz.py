@@ -34,7 +34,7 @@ with tab1:
     st.markdown("""
     **Our Three-Step Approach:**
     
-    **Step 1: Group Similar Innovations**
+    **Step 1: Group Similar Innovations using embeddings**
     - Generate semantic embeddings from innovation descriptions and titles
     - Use similarity thresholds to identify potential duplicate clusters
     - Scale analysis across thousands of innovation records
@@ -130,21 +130,3 @@ with tab4:
     However, with 100 manually validated pairs, these metrics demonstrate reliable performance. 
     Manual validation was limited by the time-intensive nature of expert review.
     """)
-    
-    # Optional: Add download button for results
-    if st.button("📥 Download Evaluation Results"):
-        st.success("Feature coming soon: Download detailed evaluation report")
-
-# --- SIDEBAR (Optional) ---
-with st.sidebar:
-    st.header("🔧 Analysis Tools")
-    st.markdown("""
-    **Quick Actions:**
-    - Adjust visualization parameters
-    - Export results
-    - View analysis logs
-    """)
-    
-    if st.button("🔄 Refresh Data"):
-        st.cache_data.clear()
-        st.success("Cache cleared!")
